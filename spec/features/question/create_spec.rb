@@ -11,21 +11,21 @@ feature 'User can create question', %q{
   describe 'Authenticated user' do
     background do
       sign_in(user)
-      
+
       visit questions_path
       click_on 'Ask question'
     end
 
     scenario 'asks a question' do
-      question_title = 'Test question'
-      question_body = 'Text text text'
-      fill_in 'Title', with: question_title
-      fill_in 'Body', with: question_body
+      question_attrs = attributes_for(:question)
+
+      fill_in 'Title', with: question_attrs[:title]
+      fill_in 'Body', with: question_attrs[:body]
       click_on 'Ask'
 
       expect(page).to have_content 'Your question successfully created.'
-      expect(page).to have_content question_title
-      expect(page).to have_content question_body
+      expect(page).to have_content question_attrs[:title]
+      expect(page).to have_content question_attrs[:title]
     end
 
     scenario 'asks a question with errors' do

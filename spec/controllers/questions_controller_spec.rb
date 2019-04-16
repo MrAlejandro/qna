@@ -93,32 +93,48 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with invalid attributes' do
-      before { patch :update, params: { id: question, question: attributes_for(:question, :invalid) } }
+      let(:invalid_question_params) { attributes_for(:question, :invalid) }
 
       it 'does not change question' do
+        old_title = question.title
+        old_body = question.body
+
+        patch :update, params: { id: question, question:  invalid_question_params }
         question.reload
 
-        expect(question.title).to eq 'MyString'
-        expect(question.body).to eq 'MyText'
+        expect(question.title).to eq old_title
+        expect(question.body).to eq old_body
       end
 
       it 're-renders edit view' do
+        patch :update, params: { id: question, question:  invalid_question_params }
         expect(response).to render_template :edit
       end
     end
 
     describe 'DELETE #destroy' do
-      before { login(user) }
-
       let!(:question) { create(:question) }
 
-      it 'deletes the question' do
-        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      describe 'by owner of the question' do
+        before { login(question.author) }
+
+        it 'deletes the question' do
+          expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+        end
+
+        it 'redirects to index' do
+          delete :destroy, params: { id: question }
+          expect(response).to redirect_to questions_path
+        end
       end
 
-      it 'redirects to index' do
-        delete :destroy, params: { id: question }
-        expect(response).to redirect_to questions_path
+      describe 'by other user' do
+        it 'should not delete question that is not belong to customer' do
+          other_user = create(:user)
+          login(other_user)
+
+          expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+        end
       end
     end
   end

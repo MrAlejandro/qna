@@ -11,7 +11,6 @@ feature 'User can sign in', %q{
   background { visit new_user_session_path }
 
   scenario 'Registered user tries to sign in' do
-    visit new_user_session_path
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password
     click_on 'Log in'
@@ -20,7 +19,6 @@ feature 'User can sign in', %q{
   end
 
   scenario 'Unregistered user tries to sign in' do
-    visit new_user_session_path
     fill_in 'Email', with: 'wrong@example.com'
     fill_in 'Password', with: 'secret'
     click_on 'Log in'

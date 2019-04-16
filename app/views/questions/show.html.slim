@@ -1,2 +1,15 @@
 h1= question.title
 p= question.body
+
+- if question.author?(current_user)
+  = button_to 'Delete', question_path(question), method: :delete
+
+= @answers.each do |answer|
+  p= answer.body
+  - if answer.author?(current_user)
+    = button_to 'Delete answer', answer_path(answer), method: :delete
+
+= form_with model: [question, answer], local: true do |f|
+  = f.label :body, 'Answer'
+  = f.text_area :body
+  = f.submit 'Create answer'
