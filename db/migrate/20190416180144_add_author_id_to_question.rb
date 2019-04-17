@@ -1,5 +1,6 @@
-class AddUserIdToQuestion < ActiveRecord::Migration[5.2]
+class AddAuthorIdToQuestion < ActiveRecord::Migration[5.2]
   def change
-    add_column :questions, :author_id, :integer
+    add_reference(:questions, :author)
+    add_foreign_key(:questions, :users, column: :author_id)
   end
 end

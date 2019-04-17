@@ -1,11 +1,13 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
+  before_action :set_question, only: %i[show edit update destroy]
 
   def index
     @questions = Question.all
   end
 
   def new
+    @question = Question.new
   end
 
   def create
@@ -19,14 +21,14 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @answers = question.answers.order(:id)
+    @answer = Answer.new
   end
 
   def edit
   end
 
   def update
-    if question.update(question_params)
+    if @question.update(question_params)
       redirect_to @question
     else
       render :edit
@@ -34,8 +36,8 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if question.author?(current_user)
-      question.destroy
+    if current_user&.author?(@question)
+      @question.destroy
       redirect_to questions_path, notice: 'Question has been deleted.'
     else
       render :show
@@ -44,11 +46,9 @@ class QuestionsController < ApplicationController
 
   private
 
-  def question
-    @question ||= params[:id] ? Question.find(params[:id]) : Question.new
+  def set_question
+    @question = Question.find(params[:id])
   end
-
-  helper_method :question
 
   def question_params
     params.require(:question).permit(:title, :body)

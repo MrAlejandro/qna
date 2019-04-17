@@ -1,11 +1,3 @@
 FactoryBot.define do
-  sequence :email do |n|
-    "email#{n}@example.com"
-  end
-  sequence :title do |n|
-    "Title #{n}"
-  end
-  sequence :body do |n|
-    "Body #{n}"
-  end
+  sequence(:email) { |n| "email#{n}@example.com" }
 end

@@ -3,23 +3,26 @@ class AnswersController < ApplicationController
 
   def create
     @question = Question.find(params[:question_id])
-    @answer = @question.answers.create(answer_params)
-    current_user.answers << @answer
-    current_user.save
+    @answer = @question.answers.new(answer_params)
+    @answer.author = current_user
 
-    redirect_to @question, notice: @answer.errors.full_messages.join(', ')
+    if @answer.save
+      redirect_to @question
+    else
+      @question.reload
+      render 'questions/show'
+    end
   end
 
   def destroy
     @answer = Answer.find(params[:id])
 
-    if @answer.author?(current_user)
+    if current_user&.author?(@answer)
       @answer.destroy
       redirect_to @answer.question, notice: 'Answer has been deleted.'
     else
       redirect_to @answer.question, notice: 'You have to be the owner of the question to delete it.'
     end
-
   end
 
   private

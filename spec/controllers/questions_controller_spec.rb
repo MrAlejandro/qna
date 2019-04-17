@@ -49,6 +49,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with valid attributes' do
       it 'saves a new question in the database' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+          .and change(user.questions, :count).by(1)
       end
 
       it 'redirects to show view' do
@@ -115,7 +116,7 @@ RSpec.describe QuestionsController, type: :controller do
     describe 'DELETE #destroy' do
       let!(:question) { create(:question) }
 
-      describe 'by owner of the question' do
+      context 'by owner of the question' do
         before { login(question.author) }
 
         it 'deletes the question' do
@@ -128,12 +129,17 @@ RSpec.describe QuestionsController, type: :controller do
         end
       end
 
-      describe 'by other user' do
+      context 'by other user' do
         it 'should not delete question that is not belong to customer' do
           other_user = create(:user)
           login(other_user)
 
           expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+        end
+
+        it 're-renders show page' do
+          delete :destroy, params: { id: question }
+          expect(response).to render_template :show
         end
       end
     end

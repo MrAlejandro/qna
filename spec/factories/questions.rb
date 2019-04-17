@@ -1,8 +1,11 @@
 FactoryBot.define do
+  sequence(:question_title) { |n| "Question title #{n}" }
+  sequence(:question_body) { |n| "Question body #{n}" }
+
   factory :question do
-    title
-    body
-    author { create(:user) }
+    title { generate(:question_title) }
+    body { generate(:question_body) }
+    association :author, factory: :user
 
     trait :invalid do
       title { nil }
@@ -14,4 +17,5 @@ FactoryBot.define do
       create_list :answer, 3, question: question
     end
   end
+
 end
