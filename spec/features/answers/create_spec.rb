@@ -14,7 +14,7 @@ feature 'User can create answer', %q{
       visit question_path(question)
     end
 
-    scenario "can add an answer to a question" do
+    scenario 'can add an answer to a question', js: true do
       answer_body = "Answer to question #{question.id}"
       fill_in 'Answer', with: answer_body
       click_on 'Create answer'
@@ -22,14 +22,14 @@ feature 'User can create answer', %q{
       expect(page).to have_content answer_body
     end
 
-    scenario "cannot add an invalid answer to a question" do
+    scenario 'cannot add an invalid answer to a question', js: true do
       click_on 'Create answer'
 
       expect(page).to have_content "Body can't be blank"
     end
   end
 
-  scenario "Unauthenticated user cannot add an answer to a question" do
+  scenario 'Unauthenticated user cannot add an answer to a question' do
     visit question_path(question)
     click_on 'Create answer'
 
