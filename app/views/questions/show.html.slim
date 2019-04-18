@@ -1,0 +1,17 @@
+h1= @question.title
+p= @question.body
+
+- if current_user&.author_of?(@question)
+  = button_to 'Delete', question_path(@question), method: :delete
+
+- @question.answers.each do |answer|
+  p= answer.body
+  - if current_user&.author_of?(answer)
+    = button_to 'Delete answer', answer_path(answer), method: :delete
+
+= render 'shared/errors', resource: @answer
+
+= form_with model: [@question, @answer], local: true do |f|
+  = f.label :body, 'Answer'
+  = f.text_area :body
+  = f.submit 'Create answer'
