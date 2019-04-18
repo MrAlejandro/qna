@@ -59,7 +59,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'cannot delete it' do
         other_user = create(:user)
         login(other_user)
-        expect { delete :destroy, params: { id: first_question.id } }.to_not change(question.answers, :count)
+        expect { delete :destroy, params: { id: first_question.id } }.to_not change(Answer, :count)
       end
 
       it 'gets redirect to question page' do

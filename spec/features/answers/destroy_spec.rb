@@ -6,18 +6,37 @@ feature 'User can delete answer', %q{
 
   given(:answer) { create(:answer) }
 
-  background do
-    sign_in(answer.author)
+  describe 'Authorized user that owns the answer' do
+    background do
+      sign_in(answer.author)
+      visit question_path(answer.question)
+    end
 
-    visit question_path(answer.question)
+    scenario 'can delete it' do
+      expect(page).to have_content answer.body
+
+      click_on 'Delete answer'
+
+      expect(page).to have_content 'Answer has been deleted.'
+      expect(page).to_not have_content answer.body
+    end
   end
 
-  scenario 'User can delete answer that belongs to him' do
-    expect(page).to have_content answer.body
+  describe 'Authorized user that does not onw the answer' do
+    given(:user) { create(:user) }
 
-    click_on 'Delete answer'
+    scenario 'cannot delete it' do
+      sign_in(user)
+      visit question_path(answer.question)
 
-    expect(page).to have_content 'Answer has been deleted.'
-    expect(page).to_not have_content answer.body
+      expect(page).to_not have_link('Delete answer')
+    end
+  end
+
+  describe 'Unauthorized user' do
+    scenario 'cannot delete the answer' do
+      visit question_path(answer.question)
+      expect(page).to_not have_link('Delete answer')
+    end
   end
 end
