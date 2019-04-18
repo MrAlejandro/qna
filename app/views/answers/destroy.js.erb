@@ -1,0 +1,3 @@
+<% unless @answer.persisted? %>
+$('#answer_<%= @answer.id %>').remove();
+<% end %>

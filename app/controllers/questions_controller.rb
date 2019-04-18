@@ -22,13 +22,14 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    @answers = answers_best_first(@question)
   end
 
   def edit
   end
 
   def update
-    @question.update(question_params)
+    @question.update(question_params) if current_user.author_of?(@question)
     render :update
   end
 
@@ -42,6 +43,10 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def answers_best_first(question)
+    question.answers.order(best: :desc)
+  end
 
   def set_question
     @question = Question.find(params[:id])

@@ -12,12 +12,11 @@ feature 'User can delete answer', %q{
       visit question_path(answer.question)
     end
 
-    scenario 'can delete it' do
+    scenario 'can delete it', js: true do
       expect(page).to have_content answer.body
 
       click_on 'Delete answer'
 
-      expect(page).to have_content 'Answer has been deleted.'
       expect(page).to_not have_content answer.body
     end
   end
