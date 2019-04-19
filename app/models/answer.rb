@@ -4,7 +4,14 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
-  def best?
-    best
+  scope :best_first, -> { order(best: :desc) }
+
+  def mark_as_best!
+    question_answers = question.answers
+
+    ActiveRecord::Base.transaction do
+      question_answers.update_all(best: false)
+      update!(best: true)
+    end
   end
 end

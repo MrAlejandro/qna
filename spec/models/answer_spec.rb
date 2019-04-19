@@ -4,4 +4,16 @@ RSpec.describe Answer, type: :model do
   it { should belong_to(:question).required }
 
   it { should validate_presence_of :body }
+
+  it 'should mark answer as best and have only one best answer at a time' do
+    question = create(:question_with_answers)
+
+    last_answer = question.answers.last
+    last_answer.mark_as_best!
+
+    first_answer = question.answers.first
+
+    expect { first_answer.mark_as_best! }.to change { first_answer.best }.from(false).to(true)
+      .and change { last_answer.reload.best }.from(true).to(false)
+  end
 end

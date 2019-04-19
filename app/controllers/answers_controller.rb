@@ -16,18 +16,11 @@ class AnswersController < ApplicationController
 
   def best
     @question = @answer.question
-
-    if current_user.author_of?(@question)
-      unselect_best_answer!(@question.answers)
-      @answer.update(best: true)
-    end
-
-    render :best
+    @answer.mark_as_best! if current_user.author_of?(@question)
   end
 
   def destroy
     @answer.destroy if current_user&.author_of?(@answer)
-    render :destroy
   end
 
   private
@@ -38,9 +31,5 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body)
-  end
-
-  def unselect_best_answer!(answers)
-    answers.update_all(best: false)
   end
 end
