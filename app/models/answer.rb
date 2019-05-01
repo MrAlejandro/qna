@@ -16,10 +16,4 @@ class Answer < ApplicationRecord
       update!(best: true)
     end
   end
-
-  def delete_file(file_id)
-    @file = files.find(file_id)
-    @file.purge if @file
-    @file
-  end
 end

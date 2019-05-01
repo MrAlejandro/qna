@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, only: %i[show edit update destroy delete_file]
+  before_action :set_question, only: %i[show edit update destroy]
 
   def index
     @questions = Question.all
@@ -39,10 +39,6 @@ class QuestionsController < ApplicationController
     else
       render :show
     end
-  end
-
-  def delete_file
-    @file = @question.delete_file(params[:file_id]) if current_user&.author_of?(@question)
   end
 
   private

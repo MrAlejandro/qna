@@ -5,10 +5,4 @@ class Question < ApplicationRecord
   has_many_attached :files
 
   validates :title, :body, presence: true
-
-  def delete_file(file_id)
-    @file = files.find(file_id)
-    @file.purge if @file
-    @file
-  end
 end

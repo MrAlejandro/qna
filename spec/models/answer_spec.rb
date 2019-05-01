@@ -20,11 +20,4 @@ RSpec.describe Answer, type: :model do
   it 'has many attached file' do
     expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
-
-  it 'removes attached file' do
-    answer = create(:answer)
-    answer.files.attach(io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: 'rails_helper.rb')
-
-    expect { answer.delete_file(answer.files.first.id) }.to change { answer.files.count }.by(-1)
-  end
 end

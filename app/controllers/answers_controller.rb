@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :set_answer, only: %i[destroy update best delete_file]
+  before_action :set_answer, only: %i[destroy update best]
   before_action :authenticate_user!
 
   def create
@@ -21,10 +21,6 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy if current_user&.author_of?(@answer)
-  end
-
-  def delete_file
-    @file = @answer.delete_file(params[:file_id]) if current_user.author_of?(@answer)
   end
 
   private
