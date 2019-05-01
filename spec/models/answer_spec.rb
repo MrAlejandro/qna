@@ -16,4 +16,8 @@ RSpec.describe Answer, type: :model do
     expect { first_answer.mark_as_best! }.to change { first_answer.best }.from(false).to(true)
       .and change { last_answer.reload.best }.from(true).to(false)
   end
+
+  it 'has many attached file' do
+    expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
+  end
 end

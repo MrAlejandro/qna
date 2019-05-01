@@ -16,35 +16,35 @@ feature 'User can create question', %q{
       click_on 'Ask question'
     end
 
-    scenario 'asks a question' do
-      question_attrs = attributes_for(:question)
+    describe 'can ask a question' do
+      given(:question_attrs) { attributes_for(:question) }
 
-      fill_in 'Title', with: question_attrs[:title]
-      fill_in 'Body', with: question_attrs[:body]
-      click_on 'Ask'
+      background do
+        fill_in 'Title', with: question_attrs[:title]
+        fill_in 'Body', with: question_attrs[:body]
+      end
 
-      expect(page).to have_content 'Your question successfully created.'
-      expect(page).to have_content question_attrs[:title]
-      expect(page).to have_content question_attrs[:title]
+      scenario 'with valid data' do
+        click_on 'Ask'
+
+        expect(page).to have_content 'Your question successfully created.'
+        expect(page).to have_content question_attrs[:title]
+        expect(page).to have_content question_attrs[:body]
+      end
+
+      scenario 'with attached file' do
+        attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Ask'
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
     end
 
     scenario 'asks a question with errors' do
       click_on 'Ask'
 
       expect(page).to have_content "Title can't be blank"
-    end
-
-    scenario 'asks a question with attached file' do
-      question_attrs = attributes_for(:question)
-
-      fill_in 'Title', with: question_attrs[:title]
-      fill_in 'Body', with: question_attrs[:body]
-
-      attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
-      click_on 'Ask'
-
-      expect(page).to have_link 'rails_helper.rb'
-      expect(page).to have_link 'spec_helper.rb'
     end
   end
 
