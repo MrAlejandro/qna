@@ -14,8 +14,7 @@ FactoryBot.define do
 
   factory :question_with_answers, parent: :question do
     after :create do |question|
-      create_list :answer, 3, question: question
+      question.answers = create_list(:answer, 3)
     end
   end
-
 end

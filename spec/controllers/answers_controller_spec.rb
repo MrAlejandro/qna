@@ -158,4 +158,39 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #delete_file' do
+    let(:answer) { create(:answer) }
+    let(:user) { create(:user) }
+
+    before do
+      answer.files.attach(io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: 'rails_helper.rb')
+    end
+
+    describe 'User that owns the answer' do
+      before { login(answer.author) }
+
+      it 'can delete attached file' do
+        expect { delete :delete_file, params: { id: answer.id, file_id: answer.files.first.id }, format: :js }.to change { answer.reload.files.count }.from(1).to(0)
+      end
+
+      it 'should render delete_file template' do
+        delete :delete_file, params: { id: answer.id, file_id: answer.files.first.id }, format: :js
+        expect(response).to render_template :delete_file
+      end
+    end
+
+    describe 'User that does not own the answer' do
+      before { login(user) }
+
+      it 'cannot delete attached file' do
+        expect { delete :delete_file, params: { id: answer.id, file_id: answer.files.first.id }, format: :js }.to_not change { answer.reload.files.count }
+      end
+
+      it 'should render best template' do
+        delete :delete_file, params: { id: answer.id, file_id: answer.files.first.id }, format: :js
+        expect(response).to render_template :delete_file
+      end
+    end
+  end
 end

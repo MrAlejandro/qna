@@ -11,7 +11,9 @@ div.answer class=('best-answer' if answer.best?) id="answer_#{answer.id}"
 
   - if answer.files.attached?
     - answer.files.each do |file|
-      p= link_to file.filename.to_s, url_for(file)
+      div id="answer_file_#{file.id}"
+        p= link_to file.filename.to_s, url_for(file)
+        = button_to "Delete '#{file.filename.to_s}'", delete_file_from_answer_path(answer, file), method: :delete, id: "delete_answer_file_#{file.id}", remote: true
 
   = form_with model: answer, class: 'hidden', html: { id: "edit_answer_#{answer.id}" } do |f|
     p

@@ -41,7 +41,7 @@ group :test do
   gem 'chromedriver-helper'
   gem 'shoulda-matchers'
   gem 'rails-controller-testing'
-  gem 'launchy'
+  gem 'launchy' # usage 'save_and_open_page'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
