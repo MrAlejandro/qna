@@ -17,5 +17,8 @@ div.answer class=('best-answer' if answer.best?) id="answer_#{answer.id}"
     p
       = f.label :body, 'Answer', for: "answer_body_#{answer.id}"
       = f.text_area :body, id: "answer_body_#{answer.id}"
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true
 
     = f.submit 'Save'
