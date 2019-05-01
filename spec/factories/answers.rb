@@ -5,6 +5,7 @@ FactoryBot.define do
     body { generate(:answer_body) }
     question
     association :author, factory: :user
+    best { false }
 
     trait :invalid do
       body { nil }

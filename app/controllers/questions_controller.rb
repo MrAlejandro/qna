@@ -22,17 +22,14 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    @answers = @question.answers.best_first
   end
 
   def edit
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question
-    else
-      render :edit
-    end
+    @question.update(question_params) if current_user.author_of?(@question)
   end
 
   def destroy
