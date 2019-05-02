@@ -16,6 +16,12 @@ div.answer class=('best-answer' if answer.best?) id="answer_#{answer.id}"
         - if current_user&.author_of?(answer)
           = button_to "Delete '#{file.filename.to_s}'", attachment_path(file, redirect_url: question_url(answer.question)), method: :delete, id: "delete_answer_file_#{file.id}"
 
+  .links
+    p Links:
+    ul
+      - answer.links.each do |link|
+        li= link_to link.name, link.url
+
   = form_with model: answer, class: 'hidden', html: { id: "edit_answer_#{answer.id}" } do |f|
     p
       = f.label :body, 'Answer', for: "answer_body_#{answer.id}"
