@@ -12,4 +12,14 @@
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true
 
+  p Links:
+  p
+    = f.fields_for :links do |links|
+      p
+        = links.label :name, 'Link name'
+        = links.text_field :name
+      p
+        = links.label :url
+        = links.text_field :url
+
   p= f.submit 'Ask'
