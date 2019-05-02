@@ -42,9 +42,11 @@ feature 'User can create question', %q{
     end
 
     scenario 'asks a question with errors' do
+      fill_in 'Url', with: 'tcp://dude.com'
       click_on 'Ask'
 
       expect(page).to have_content "Title can't be blank"
+      expect(page).to have_content "Links url is an invalid URL"
     end
   end
 

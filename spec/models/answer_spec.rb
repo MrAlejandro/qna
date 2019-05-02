@@ -6,7 +6,6 @@ RSpec.describe Answer, type: :model do
 
   it { should accept_nested_attributes_for :links }
 
-
   it { should validate_presence_of :body }
 
   it 'should mark answer as best and have only one best answer at a time' do
