@@ -6,24 +6,30 @@ feature 'User can add links to answer', %q{
   I'd like to be able to add links
 } do
   given(:user) { create(:user) }
-  given(:link) { 'https://google.com' }
   given!(:question) { create(:question) }
+  given(:google_link) { {name: 'Google', link: 'https://google.com'} }
+  given(:yandex_link) { {name: 'Yandex', link: 'https://yandex.ru'} }
   given(:answer_body) { "Answer to question #{question.id}" }
 
-  scenario 'User adds link when asks answer', js: true do
+  scenario 'User adds several links when answers a question', js: true do
     sign_in(user)
     visit question_path(question)
 
     fill_in 'Answer', with: answer_body
 
-    link_name = 'My link'
-    fill_in 'Link name', with: link_name
-    fill_in 'Url', with: link
+    fill_in 'Link name', with: google_link[:name]
+    fill_in 'Url', with: google_link[:link]
+
+    click_on 'Add new link for answer'
+
+    all('.form-field-link-name').last.set(yandex_link[:name])
+    all('.form-field-link-url').last.set(yandex_link[:link])
 
     click_on 'Create answer'
 
     within '.answers' do
-      expect(page).to have_link link_name, href: link
+      expect(page).to have_link google_link[:name], href: google_link[:link]
+      expect(page).to have_link yandex_link[:name], href: yandex_link[:link]
     end
   end
 end

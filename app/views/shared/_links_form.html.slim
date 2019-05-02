@@ -1,0 +1,3 @@
+.links-form
+  = f.fields_for :links do |links|
+    = render 'link_fields', f: links
