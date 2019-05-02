@@ -33,11 +33,6 @@ RSpec.describe AttachmentsController, type: :controller do
           delete :destroy, params: { id: answer.files.first, redirect_url: question_url(question) }
           expect(response).to redirect_to question
         end
-
-        it 'should redirect to home page for non existing attachment' do
-          delete :destroy, params: { id: 0 }
-          expect(response).to redirect_to root_path
-        end
       end
     end
 
