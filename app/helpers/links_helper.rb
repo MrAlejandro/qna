@@ -1,5 +1,3 @@
-require 'open-uri'
-
 module LinksHelper
   def render_link(link)
     if gist?(link)

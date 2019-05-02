@@ -26,4 +26,10 @@ FactoryBot.define do
       question.answers = create_list(:answer, 3)
     end
   end
+
+  factory :question_with_links, parent: :question do
+    after :create do |question|
+      question.links = create_list(:link, 3, linkable: question)
+    end
+  end
 end
