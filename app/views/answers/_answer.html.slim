@@ -20,7 +20,7 @@ div.answer class=('best-answer' if answer.best?) id="answer_#{answer.id}"
     p Links:
     ul
       - answer.links.each do |link|
-        li= link_to link.name, link.url
+        li= render_link(link)
 
   = form_with model: answer, class: 'hidden', html: { id: "edit_answer_#{answer.id}" } do |f|
     p
