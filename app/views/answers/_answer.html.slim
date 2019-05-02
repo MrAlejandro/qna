@@ -9,7 +9,19 @@ div.answer class=('best-answer' if answer.best?) id="answer_#{answer.id}"
   - if current_user&.author_of?(answer.question)
     = button_to 'Best', best_answer_path(answer), id: "best_answer_#{answer.id}", method: :patch, remote: true
 
+  - if answer.files.attached?
+    - answer.files.each do |file|
+      div id="answer_file_#{file.id}"
+        p= link_to file.filename.to_s, url_for(file)
+        - if current_user&.author_of?(answer)
+          = button_to "Delete '#{file.filename.to_s}'", attachment_path(file, redirect_url: question_url(answer.question)), method: :delete, id: "delete_answer_file_#{file.id}"
+
   = form_with model: answer, class: 'hidden', html: { id: "edit_answer_#{answer.id}" } do |f|
-    = f.label :body, 'Answer', for: "answer_body_#{answer.id}"
-    = f.text_area :body, id: "answer_body_#{answer.id}"
+    p
+      = f.label :body, 'Answer', for: "answer_body_#{answer.id}"
+      = f.text_area :body, id: "answer_body_#{answer.id}"
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true, direct_upload: true
+
     = f.submit 'Save'

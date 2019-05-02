@@ -14,12 +14,26 @@ feature 'User can create answer', %q{
       visit question_path(question)
     end
 
-    scenario 'can add an answer to a question', js: true do
-      answer_body = "Answer to question #{question.id}"
-      fill_in 'Answer', with: answer_body
-      click_on 'Create answer'
+    describe 'can add an answer' do
+      given(:answer_body) { "Answer to question #{question.id}" }
 
-      expect(page).to have_content answer_body
+      background do
+        fill_in 'Answer', with: answer_body
+      end
+
+      scenario 'with valid data', js: true do
+        click_on 'Create answer'
+
+        expect(page).to have_content answer_body
+      end
+
+      scenario 'with attached file', js: true do
+        attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Create answer'
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
     end
 
     scenario 'cannot add an invalid answer to a question', js: true do
@@ -27,6 +41,7 @@ feature 'User can create answer', %q{
 
       expect(page).to have_content "Body can't be blank"
     end
+
   end
 
   scenario 'Unauthenticated user cannot add an answer to a question' do

@@ -10,12 +10,20 @@ FactoryBot.define do
     trait :invalid do
       title { nil }
     end
+
+    trait :with_files do
+      files do
+        [
+          fixture_file_upload(Rails.root.join('spec', 'rails_helper.rb'), 'rails_helper.rb'),
+          fixture_file_upload(Rails.root.join('spec', 'spec_helper.rb'), 'rails_helper.rb'),
+        ]
+      end
+    end
   end
 
   factory :question_with_answers, parent: :question do
     after :create do |question|
-      create_list :answer, 3, question: question
+      question.answers = create_list(:answer, 3)
     end
   end
-
 end
