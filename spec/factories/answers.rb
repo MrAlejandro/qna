@@ -16,6 +16,10 @@ FactoryBot.define do
       end
     end
 
+    trait :best do
+      best { true }
+    end
+
     trait :invalid do
       body { nil }
     end

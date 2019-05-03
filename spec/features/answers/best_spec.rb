@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'User can select the best answer', %q{
   In order to select answer that helped user with his problem
 } do
-  given!(:question) { create(:question_with_answers)}
+  given!(:question) { create(:question_with_answers_and_reward) }
   given(:user) { create(:user) }
 
   describe 'The owner of the question' do
@@ -27,6 +27,18 @@ feature 'User can select the best answer', %q{
         expect(page).to_not have_content(last_answer.body)
         expect(page).to have_content(first_answer.body)
       end
+    end
+
+    scenario 'the answer author gets awarded if his answer was selected as the best', js: true do
+      last_answer = question.answers.last
+      find("#best_answer_#{last_answer.id}").click
+
+      sign_out
+      sign_in(last_answer.author)
+      visit rewards_path
+
+      expect(page).to have_content(question.title)
+      expect(page).to have_content(question.reward.name)
     end
   end
 

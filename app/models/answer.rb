@@ -14,9 +14,10 @@ class Answer < ApplicationRecord
   def mark_as_best!
     question_answers = question.answers
 
-    ActiveRecord::Base.transaction do
+    Answer.transaction do
       question_answers.update_all(best: false)
       update!(best: true)
+      question.reward.update(user: author) if question.reward
     end
   end
 end

@@ -20,6 +20,15 @@ RSpec.describe Answer, type: :model do
       .and change { last_answer.reload.best }.from(true).to(false)
   end
 
+  it 'should reward user for best answer' do
+    question = create(:question_with_answers_and_reward)
+
+    last_answer = question.answers.last
+
+
+    expect { last_answer.mark_as_best! }.to change { last_answer.author.rewards.count }.by(1)
+  end
+
   it 'has many attached file' do
     expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end

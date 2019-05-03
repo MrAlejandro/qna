@@ -3,6 +3,9 @@
 .question
   = render @question
 
+- if @question.reward
+  .reward You will get the '#{@question.reward.name}' reward for the best answer.
+
 .answers
   = render @answers
 

@@ -25,7 +25,7 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:answer)).to be_a_new(Answer)
     end
 
-    it 'assigns a new Link to @link' do
+    it 'assigns a new Link to @question' do
       expect(assigns(:answer).links.first).to be_a_new(Link)
     end
 
@@ -44,7 +44,7 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to be_a_new(Question)
     end
 
-    it 'assigns a new Link to @link' do
+    it 'assigns a new Link to @question' do
       expect(assigns(:question).links.first).to be_a_new(Link)
     end
 
