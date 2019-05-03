@@ -33,4 +33,8 @@ p= question.body
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true
 
+  p Links:
+  .add-new-link= link_to_add_association 'Add new link for question', f, :links, partial: 'shared/link_fields'
+  = render 'shared/links_form', f: f
+
   = f.submit 'Save'

@@ -6,6 +6,7 @@ feature 'User can add links to question', %q{
   I'd like to be able to add links
 } do
   given(:user) { create(:user) }
+  given(:question) { create(:question) }
   given(:google_link) { {name: 'Google', link: 'https://google.com'} }
   given(:yandex_link) { {name: 'Yandex', link: 'https://yandex.ru'} }
 
@@ -30,5 +31,29 @@ feature 'User can add links to question', %q{
 
     expect(page).to have_link google_link[:name], href: google_link[:link]
     expect(page).to have_link yandex_link[:name], href: yandex_link[:link]
+  end
+
+  scenario 'User adds link when edits question', js: true do
+    sign_in(question.author)
+    visit question_path(question)
+
+    within '.question' do
+      click_on 'Edit question'
+
+      click_on 'Add new link for question'
+
+      fill_in 'Link name', with: google_link[:name]
+      fill_in 'Url', with: google_link[:link]
+
+      click_on 'Add new link for question'
+
+      all('.form-field-link-name').last.set(yandex_link[:name])
+      all('.form-field-link-url').last.set(yandex_link[:link])
+
+      click_on 'Save'
+
+      expect(page).to have_link google_link[:name], href: google_link[:link]
+      expect(page).to have_link yandex_link[:name], href: yandex_link[:link]
+    end
   end
 end

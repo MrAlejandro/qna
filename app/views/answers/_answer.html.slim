@@ -31,5 +31,8 @@ div.answer class=('best-answer' if answer.best?) id="answer_#{answer.id}"
     p
       = f.label :files
       = f.file_field :files, multiple: true, direct_upload: true
+    p Links:
+    .add-new-link= link_to_add_association 'Add new link for answer', f, :links, partial: 'shared/link_fields'
+    = render 'shared/links_form', f: f
 
     = f.submit 'Save'

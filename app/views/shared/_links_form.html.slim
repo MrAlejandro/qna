@@ -1,3 +1,3 @@
 .links-form
-  = f.fields_for :links do |links|
-    = render 'link_fields', f: links
+  = f.fields_for :links do |links_form|
+    = render 'shared/link_fields', f: links_form
