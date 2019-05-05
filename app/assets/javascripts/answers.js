@@ -5,5 +5,16 @@ $(document).on('turbolinks:load', function () {
     var answerId = $(this).data('answerId');
     $('form#edit_answer_' + answerId).show();
   });
+
+  $('form.new-answer')
+    .on('ajax:success', function (e) {
+      var xhr = e.detail[2];
+      $('.answers').append(xhr.responseText);
+    })
+    .on('ajax:error', function (e) {
+      var xhr = e.detail[2];
+      $('.answer-errors').html(xhr.responseText);
+    });
+  ;
 });
 
