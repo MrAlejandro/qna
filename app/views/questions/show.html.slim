@@ -3,6 +3,9 @@
 .question
   = render @question
 
+- if @question.reward
+  .reward You will get the '#{@question.reward.name}' reward for the best answer.
+
 .answers
   = render @answers
 
@@ -16,5 +19,9 @@
   p
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true
+
+  p Links:
+  .add-new-link= link_to_add_association 'Add new link for answer', f, :links, partial: 'shared/link_fields'
+  = render 'shared/links_form', f: f
 
   = f.submit 'Create answer'

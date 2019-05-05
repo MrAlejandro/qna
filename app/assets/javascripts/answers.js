@@ -6,3 +6,4 @@ $(document).on('turbolinks:load', function () {
     $('form#edit_answer_' + answerId).show();
   });
 });
+

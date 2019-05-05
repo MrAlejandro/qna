@@ -37,9 +37,11 @@ feature 'User can create answer', %q{
     end
 
     scenario 'cannot add an invalid answer to a question', js: true do
+      fill_in 'Url', with: 'tcp://dude.com'
       click_on 'Create answer'
 
       expect(page).to have_content "Body can't be blank"
+      expect(page).to have_content "Links url is an invalid URL"
     end
 
   end

@@ -16,6 +16,14 @@ div.answer class=('best-answer' if answer.best?) id="answer_#{answer.id}"
         - if current_user&.author_of?(answer)
           = button_to "Delete '#{file.filename.to_s}'", attachment_path(file, redirect_url: question_url(answer.question)), method: :delete, id: "delete_answer_file_#{file.id}"
 
+  .links
+    p Links:
+    ul
+      - answer.links.each do |link|
+        li= render_link(link)
+        - if current_user&.author_of?(answer)
+          = button_to "Delete '#{link.name}'", link_path(link, redirect_url: question_url(answer.question)), method: :delete, id: "delete_answer_link_#{link.id}"
+
   = form_with model: answer, class: 'hidden', html: { id: "edit_answer_#{answer.id}" } do |f|
     p
       = f.label :body, 'Answer', for: "answer_body_#{answer.id}"
@@ -23,5 +31,8 @@ div.answer class=('best-answer' if answer.best?) id="answer_#{answer.id}"
     p
       = f.label :files
       = f.file_field :files, multiple: true, direct_upload: true
+    p Links:
+    .add-new-link= link_to_add_association 'Add new link for answer', f, :links, partial: 'shared/link_fields'
+    = render 'shared/links_form', f: f
 
     = f.submit 'Save'

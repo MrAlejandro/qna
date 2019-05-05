@@ -1,36 +1,36 @@
 require 'rails_helper'
 
-RSpec.describe AttachmentsController, type: :controller do
+RSpec.describe LinksController, type: :controller do
   describe 'DELETE #destroy' do
 
     describe 'User that owns' do
       describe 'a question' do
-        let(:question) { create(:question, :with_files) }
+        let(:question) { create(:question_with_links) }
 
         before { login(question.author) }
 
-        it 'can delete its attachment' do
-          expect { delete :destroy, params: { id: question.files.first } }.to change { question.files.count }.by(-1)
+        it 'can delete its link' do
+          expect { delete :destroy, params: { id: question.links.first } }.to change { question.links.count }.by(-1)
         end
 
         it 'gets redirect to question page' do
-          delete :destroy, params: { id: question.files.first }
+          delete :destroy, params: { id: question.links.first }
           expect(response).to redirect_to question
         end
       end
 
       describe 'an answer' do
-        let(:answer) { create(:answer, :with_files) }
+        let(:answer) { create(:answer_with_links) }
         let(:question) { create(:question, answers: [answer]) }
 
         before { login(answer.author) }
 
-        it 'can delete its attachment' do
-          expect { delete :destroy, params: { id: answer.files.first } }.to change { answer.files.count }.by(-1)
+        it 'can delete its links' do
+          expect { delete :destroy, params: { id: answer.links.first } }.to change { answer.links.count }.by(-1)
         end
 
         it 'gets redirect to question page' do
-          delete :destroy, params: { id: answer.files.first, redirect_url: question_url(question) }
+          delete :destroy, params: { id: answer.links.first, redirect_url: question_url(question) }
           expect(response).to redirect_to question
         end
       end
@@ -42,29 +42,28 @@ RSpec.describe AttachmentsController, type: :controller do
       before { login(other_user) }
 
       describe 'a question' do
-        let(:question) { create(:question, :with_files) }
-
+        let(:question) { create(:question_with_links) }
 
         it 'cannot delete it' do
-          expect { delete :destroy, params: { id: question.files.first.id } }.to_not change { question.files.count }
+          expect { delete :destroy, params: { id: question.links.first.id } }.to_not change { question.links.count }
         end
 
         it 'gets redirect to question page' do
-          delete :destroy, params: { id: question.files.first.id }
+          delete :destroy, params: { id: question.links.first.id }
           expect(response).to redirect_to question
         end
       end
 
       describe 'an answer' do
-        let(:answer) { create(:answer, :with_files) }
+        let(:answer) { create(:answer_with_links) }
         let(:question) { create(:question, answers: [answer]) }
 
         it 'cannot delete it' do
-          expect { delete :destroy, params: { id: answer.files.first.id } }.to_not change { answer.files.count }
+          expect { delete :destroy, params: { id: answer.links.first.id } }.to_not change { answer.links.count }
         end
 
         it 'gets redirect to question page' do
-          delete :destroy, params: { id: answer.files.first.id, redirect_url: question_path(question) }
+          delete :destroy, params: { id: answer.links.first.id, redirect_url: question_path(question) }
           expect(response).to redirect_to question
         end
       end

@@ -39,12 +39,24 @@ feature 'User can create question', %q{
         expect(page).to have_link 'rails_helper.rb'
         expect(page).to have_link 'spec_helper.rb'
       end
+
+      scenario 'with reward for the best answer' do
+        reward_name = 'Major'
+        fill_in 'Reward name', with: reward_name
+        attach_file 'Reward image', "#{Rails.root}/spec/fixtures/image.png"
+
+        click_on 'Ask'
+
+        expect(page).to have_content "You will get the '#{reward_name}' reward for the best answer."
+      end
     end
 
     scenario 'asks a question with errors' do
+      fill_in 'Url', with: 'tcp://dude.com'
       click_on 'Ask'
 
       expect(page).to have_content "Title can't be blank"
+      expect(page).to have_content "Links url is an invalid URL"
     end
   end
 
