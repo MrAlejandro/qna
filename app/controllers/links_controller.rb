@@ -3,7 +3,7 @@ class LinksController < ApplicationController
 
   def destroy
     link = Link.find(params[:id])
-    resource = link.linkable_type.constantize.find(link.linkable_id)
+    resource = link.linkable
 
     if resource && current_user.author_of?(resource)
       link.destroy
