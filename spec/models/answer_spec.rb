@@ -25,7 +25,6 @@ RSpec.describe Answer, type: :model do
 
     last_answer = question.answers.last
 
-
     expect { last_answer.mark_as_best! }.to change { last_answer.author.rewards.count }.by(1)
   end
 

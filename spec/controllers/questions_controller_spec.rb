@@ -180,4 +180,52 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'POST #upvote' do
+    let!(:question) { create(:question) }
+
+    context 'by the other user' do
+      before { login(create(:user)) }
+
+      it 'should be able to upvote the question' do
+        expect { post :upvote, params: { id: question }, format: :json }.to change{ question.upvotes.count }.by(1)
+      end
+
+      it 'should respond with json' do
+        post :upvote, params: { id: question }, format: :json
+        expect(response.content_type).to eq('application/json')
+      end
+    end
+
+    context 'by the non-authorized user' do
+      it 'should not be able to upvote the question' do
+        expect { post :upvote, params: { id: question }, format: :json }.to_not change{ question.upvotes.count }
+      end
+    end
+
+    context 'by the question author' do
+      before { login(question.author) }
+
+      it 'should not be able to upvote the question' do
+        expect { post :upvote, params: { id: question }, format: :json }.to_not change{ question.upvotes.count }
+      end
+    end
+  end
+
+  describe 'POST #downvote' do
+    let!(:question) { create(:question) }
+
+    context 'by the other user' do
+      before { login(create(:user)) }
+
+      it 'should be able to downvote the question' do
+        expect { post :downvote, params: { id: question }, format: :json }.to change{ question.downvotes.count }.by(1)
+      end
+
+      it 'should respond with json' do
+        post :downvote, params: { id: question }, format: :json
+        expect(response.content_type).to eq('application/json')
+      end
+    end
+  end
 end
