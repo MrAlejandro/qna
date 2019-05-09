@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
   it { should have_many(:links).dependent(:destroy) }
+  it { should have_many(:votes).dependent(:destroy) }
   it { should belong_to(:question).required }
 
   it { should accept_nested_attributes_for :links }
@@ -30,5 +31,23 @@ RSpec.describe Answer, type: :model do
 
   it 'has many attached file' do
     expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
+  end
+
+  it 'should be able to vote an answer only once' do
+    answer = create(:answer)
+    user = create(:user)
+
+    expect { answer.upvote(user) }.to change { answer.upvotes.count }.by(1)
+
+    expect { answer.downvote(user) }.to change { answer.downvotes.count }.by(1)
+                                              .and change { answer.upvotes.count }.by(-1)
+  end
+
+  it 'should be able to cancel previous vote' do
+    answer = create(:answer)
+    user = create(:user)
+
+    answer.upvote(user)
+    expect { answer.upvote(user) }.to change { answer.upvotes.count }.by(-1)
   end
 end

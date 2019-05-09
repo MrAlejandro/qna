@@ -1,18 +1,8 @@
 .votes
   - if current_user && !current_user.author_of?(resource)
     .vote-links-container
-      p= link_to 'Up vote',
-              upvote_question_path(resource, format: :json),
-              method: :post,
-              remote: true,
-              class: 'vote-link',
-              data: { target_id: "vote_for_#{resource.class}_#{resource.id}" }
-      p= link_to 'Down vote',
-              downvote_question_path(resource, format: :json),
-              method: :post,
-              remote: true,
-              class: 'vote-link',
-              data: { target_id: "vote_for_#{resource.class}_#{resource.id}" }
+      p= upvote_link(resource)
+      p= downvote_link(resource)
 
   .vote-rating id="vote_for_#{resource.class}_#{resource.id}"
     div.voting-rating
