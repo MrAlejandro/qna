@@ -1,0 +1,10 @@
+.votes
+  - if current_user && !current_user.author_of?(resource)
+    .vote-links-container
+      p= upvote_link(resource)
+      p= downvote_link(resource)
+
+  .vote-rating id="vote_for_#{resource.class}_#{resource.id}"
+    div.voting-rating
+      | Rating:
+      span.rating=resource.rating
