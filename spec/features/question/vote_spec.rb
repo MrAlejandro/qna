@@ -13,12 +13,22 @@ feature 'User can vote for question', %q{
       visit question_path(question)
     end
 
-    scenario 'can vote for a question', js: true do
+    scenario 'can upvote the question', js: true do
       within '.question' do
         click_on 'Up vote'
 
         within '.vote-rating' do
-          expect(page).to have_content question.rating
+          expect(page).to have_content 1
+        end
+      end
+    end
+
+    scenario 'can downvote the question', js: true do
+      within '.question' do
+        click_on 'Down vote'
+
+        within '.vote-rating' do
+          expect(page).to have_content -1
         end
       end
     end

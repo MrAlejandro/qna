@@ -14,26 +14,26 @@ module Votable
   end
 
   def rating
-    upvotes.count - downvotes.count
+    votes.sum(:value)
   end
 
   def upvotes
-    votes.where(vote: Vote::VOTE_CODE_UP)
+    votes.where(value: Vote::VOTE_CODE_UP)
   end
 
   def downvotes
-    votes.where(vote: Vote::VOTE_CODE_DOWN)
+    votes.where(value: Vote::VOTE_CODE_DOWN)
   end
 
   private
 
   def vote(user, vote)
-    if votes.where(user: user, vote: vote).present?
+    if votes.where(user: user, value: vote).present?
       delete_user_vote!(user)
     else
       transaction do
         delete_user_vote!(user)
-        votes.create!(user: user, vote: vote)
+        votes.create!(user: user, value: vote)
       end
     end
   end
