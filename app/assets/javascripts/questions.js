@@ -12,6 +12,10 @@ $(document).on('turbolinks:load', function () {
 
     received: function (question) {
       $('.questions-list').append('<b>' + question.title + '</b><br><p>' + question.body + '</p>');
+      console.log(question);
+      $('.questions-list').append(
+        JST['templates/question'](question)
+      );
     },
   });
 });
