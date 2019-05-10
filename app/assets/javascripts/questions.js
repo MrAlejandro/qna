@@ -4,4 +4,14 @@ $(document).on('turbolinks:load', function () {
     $(this).hide();
     $('#edit_question_form').show();
   });
+
+  App.cable.subscriptions.create('QuestionsChannel', {
+    connected: function () {
+      this.perform('follow');
+    },
+
+    received: function (question) {
+      $('.questions-list').append('<b>' + question.title + '</b><br><p>' + question.body + '</p>');
+    },
+  });
 });
