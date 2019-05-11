@@ -11,10 +11,24 @@ $(document).on('turbolinks:load', function () {
     },
 
     received: function (data) {
-      var question = JSON.parse(data)
+      var question = JSON.parse(data);
 
       $('.questions-list').append(
         JST['templates/question'](question)
+      );
+    },
+  });
+
+  App.cable.subscriptions.create('CommentsChannel', {
+    connected: function () {
+      this.perform('follow', {resource: 'question', id: gon.question_id});
+    },
+
+    received: function (data) {
+      var comment = JSON.parse(data);
+
+      $('.question-comments').find('.comments').append(
+        JST['templates/comment'](comment)
       );
     },
   });

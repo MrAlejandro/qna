@@ -1,8 +1,21 @@
-div id="question_#{@question.id}"
+div.container id="question_#{@question.id}"
   .question-errors
 
   .question
     = render @question
+
+  .row.question-comments
+    .comments.container
+      .comments-errors
+      = render @question.comments
+
+    - if current_user
+      = form_for :comment, method: :post, url: comment_question_path(@question), remote: true, format: :js do |f|
+        p
+          = f.label :body, 'Comment'
+          = f.text_area :body
+
+        = f.submit 'Add comment'
 
   - if @question.reward
     .reward You will get the '#{@question.reward.name}' reward for the best answer.

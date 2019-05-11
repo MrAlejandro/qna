@@ -1,0 +1,5 @@
+$('.comments-errors').html('<%= render 'shared/errors', resource: @comment %>');
+
+<% unless @comment.errors.present? %>
+$('.question-comments .comments').append('<%= j render @comment %>');
+<% end %>

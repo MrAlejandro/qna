@@ -2,28 +2,28 @@ module Voted
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_resource, only: %i[upvote downvote]
+    before_action :set_votable, only: %i[upvote downvote]
   end
 
   def upvote
-    @resource.upvote(current_user) if !current_user.author_of?(@resource)
+    @votable.upvote(current_user) if !current_user.author_of?(@votable)
 
     respond_to do |format|
-      format.json { render json: { rating: @resource.rating } }
+      format.json { render json: { rating: @votable.rating } }
     end
   end
 
   def downvote
-    @resource.downvote(current_user) if !current_user.author_of?(@resource)
+    @votable.downvote(current_user) if !current_user.author_of?(@votable)
 
     respond_to do |format|
-      format.json { render json: { rating: @resource.rating } }
+      format.json { render json: { rating: @votable.rating } }
     end
   end
 
   private
 
-  def set_resource
-    @resource = controller_name.classify.constantize.find(params[:id])
+  def set_votable
+    @votable = controller_name.classify.constantize.find(params[:id])
   end
 end
