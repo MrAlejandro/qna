@@ -1,27 +1,28 @@
-.question-errors
+div id="question_#{@question.id}"
+  .question-errors
 
-.question
-  = render @question
+  .question
+    = render @question
 
-- if @question.reward
-  .reward You will get the '#{@question.reward.name}' reward for the best answer.
+  - if @question.reward
+    .reward You will get the '#{@question.reward.name}' reward for the best answer.
 
-.answers
-  = render @answers
+  .answers
+    = render @answers
 
-.answer-errors
-  = render 'shared/errors', resource: @answer
+  .answer-errors
+    = render 'shared/errors', resource: @answer
 
-= form_with model: [@question, @answer] do |f|
-  p
-    = f.label :body, 'Answer'
-    = f.text_area :body
-  p
-    = f.label :files
-    = f.file_field :files, multiple: true, direct_upload: true
+  = form_with model: [@question, @answer] do |f|
+    p
+      = f.label :body, 'Answer'
+      = f.text_area :body
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true, direct_upload: true
 
-  p Links:
-  .add-new-link= link_to_add_association 'Add new link for answer', f, :links, partial: 'shared/link_fields'
-  = render 'shared/links_form', f: f
+    p Links:
+    .add-new-link= link_to_add_association 'Add new link for answer', f, :links, partial: 'shared/link_fields'
+    = render 'shared/links_form', f: f
 
-  = f.submit 'Create answer'
+    = f.submit 'Create answer'

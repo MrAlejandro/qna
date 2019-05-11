@@ -1,4 +1,3 @@
-.test
-  = gon.user_id
-
-p Hello dude
+h3
+  a href="#{@view_link}" #{@title}
+p= @body

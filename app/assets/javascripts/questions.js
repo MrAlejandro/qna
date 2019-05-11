@@ -10,9 +10,9 @@ $(document).on('turbolinks:load', function () {
       this.perform('follow');
     },
 
-    received: function (question) {
-      $('.questions-list').append('<b>' + question.title + '</b><br><p>' + question.body + '</p>');
-      console.log(question);
+    received: function (data) {
+      var question = JSON.parse(data)
+
       $('.questions-list').append(
         JST['templates/question'](question)
       );

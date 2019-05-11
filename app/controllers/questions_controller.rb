@@ -29,6 +29,7 @@ class QuestionsController < ApplicationController
     @answer = Answer.new
     @answer.links.new
     @answers = @question.answers.best_first
+    gon.question_id = @question.id
   end
 
   def edit
@@ -52,7 +53,10 @@ class QuestionsController < ApplicationController
   def publish_question
     return if @question.errors.any?
 
-    ActionCable.server.broadcast('questions', @question.as_json)
+    ActionCable.server.broadcast(
+        'questions',
+        ApplicationController.render(partial: 'questions/question.json', locals: { question: @question })
+    )
   end
 
   def set_question

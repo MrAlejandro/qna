@@ -1,24 +1,25 @@
-div.answer class=('best-answer' if answer.best?) id="answer_#{answer.id}"
-  p= answer.body
+div.container.answer class=('best-answer' if answer.best?) id="answer_#{answer.id}"
+  div.row= answer.body
   - if current_user&.author_of?(answer)
-    = button_to 'Delete answer', answer_path(answer), method: :delete, remote: true
+    div.row= button_to 'Delete answer', answer_path(answer), method: :delete, remote: true
 
   - if current_user&.author_of?(answer)
-    p=link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+    div.row=link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
   - if current_user&.author_of?(answer.question)
-    = button_to 'Best', best_answer_path(answer), id: "best_answer_#{answer.id}", method: :patch, remote: true
-
-  - if answer.files.attached?
-    - answer.files.each do |file|
-      div id="answer_file_#{file.id}"
-        p= link_to file.filename.to_s, url_for(file)
-        - if current_user&.author_of?(answer)
-          = button_to "Delete '#{file.filename.to_s}'", attachment_path(file, redirect_url: question_url(answer.question)), method: :delete, id: "delete_answer_file_#{file.id}"
+    div.row= button_to 'Best', best_answer_path(answer), id: "best_answer_#{answer.id}", method: :patch, remote: true
 
   = render 'votes/vote', resource: answer
 
-  .links
+  - if answer.files.attached?
+    div.files
+      - answer.files.each do |file|
+        div.row id="answer_file_#{file.id}"
+          p= link_to file.filename.to_s, url_for(file)
+          - if current_user&.author_of?(answer)
+            = button_to "Delete '#{file.filename.to_s}'", attachment_path(file, redirect_url: question_url(answer.question)), method: :delete, id: "delete_answer_file_#{file.id}"
+
+  div.row.links
     p Links:
     ul
       - answer.links.each do |link|

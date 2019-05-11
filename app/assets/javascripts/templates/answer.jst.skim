@@ -1,0 +1,43 @@
+div.container.answer id="answer_#{@id}"
+  p= @body
+  - if @author_id == gon.user_id
+    div.row
+      a.delete-answer-link data-remote="true" rel="nofollow" data-method="delete" href="#{@answer_url}" Delete answer
+
+  - if @author_id == gon.user_id
+    div.row
+      a.edit-answer-link rel="nofollow" data-answer-id="#{@id}" href="#" Edit
+
+  - if @author_id == gon.user_id
+    div.row
+      a.mark-answer-as-best-link data-remote="true" id="best_answer_#{@id}" rel="nofollow" data-method="patch" href="#{@mark_as_best_url}" Best
+
+  .votes
+    - if @question.author_id != gon.user_id
+      .vote-links-container
+        p== @upvote_link
+        p== @downvote_link
+
+    .vote-rating id="vote_for_#{@resource_klass}_#{@id}"
+      div.voting-rating
+        | Rating:
+        span.rating= @rating
+
+  - if @files.length
+    div.row.files
+      - for file in @files
+        div id="answer_file_#{file.id}"
+          p
+            a href="#{file.file_path}" #{file.file_name}
+          - if @author_id == gon.user_id
+            a.delete-attachment-link rel="nofollow" data-method="delete" id="delete_answer_file_#{file.id}" href="#{file.delete_file_path}" Delete '#{file.file_name}'
+
+  div.row.links
+    - if @links.length
+      p Links:
+      ul
+        - for link in @links
+          li
+            a rel="nofollow" href="#{link.url}" #{link.name}
+            - if @author_id == gon.user_id
+              a.delete-link-link rel="nofollow" data-method="delete" id="delete_answer_link#{link.id}" href="#{link.delete_link_path}" Delete '#{link.name}'
