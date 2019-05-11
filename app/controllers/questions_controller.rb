@@ -30,6 +30,7 @@ class QuestionsController < ApplicationController
     @answer.links.new
     @answers = @question.answers.best_first
     gon.question_id = @question.id
+    gon.answer_ids = @answers.pluck(:id)
   end
 
   def edit

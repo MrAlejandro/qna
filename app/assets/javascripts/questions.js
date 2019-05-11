@@ -27,9 +27,15 @@ $(document).on('turbolinks:load', function () {
     received: function (data) {
       var comment = JSON.parse(data);
 
-      $('.question-comments').find('.comments').append(
-        JST['templates/comment'](comment)
-      );
+      if (comment.commentable_type !== 'Question') {
+        return;
+      }
+
+      var $container = $('#question_' + comment.commentable_id)
+        .find('.question-comments')
+        .find('.comments');
+
+      $container.append(JST['templates/comment'](comment));
     },
   });
 });

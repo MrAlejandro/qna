@@ -6,6 +6,19 @@ div.container.answer class=('best-answer' if answer.best?) id="answer_#{answer.i
   - if current_user&.author_of?(answer)
     div.row=link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
+    = form_with model: answer, class: 'hidden', html: { id: "edit_answer_#{answer.id}" } do |f|
+      p
+        = f.label :body, 'Answer', for: "answer_body_#{answer.id}"
+        = f.text_area :body, id: "answer_body_#{answer.id}"
+      p
+        = f.label :files
+        = f.file_field :files, multiple: true, direct_upload: true
+      p Links:
+      .add-new-link= link_to_add_association 'Add new link for answer', f, :links, partial: 'shared/link_fields'
+      = render 'shared/links_form', f: f
+
+      = f.submit 'Save'
+
   - if current_user&.author_of?(answer.question)
     div.row= button_to 'Best', best_answer_path(answer), id: "best_answer_#{answer.id}", method: :patch, remote: true
 
@@ -27,15 +40,5 @@ div.container.answer class=('best-answer' if answer.best?) id="answer_#{answer.i
         - if current_user&.author_of?(answer)
           = button_to "Delete '#{link.name}'", link_path(link, redirect_url: question_url(answer.question)), method: :delete, id: "delete_answer_link_#{link.id}"
 
-  = form_with model: answer, class: 'hidden', html: { id: "edit_answer_#{answer.id}" } do |f|
-    p
-      = f.label :body, 'Answer', for: "answer_body_#{answer.id}"
-      = f.text_area :body, id: "answer_body_#{answer.id}"
-    p
-      = f.label :files
-      = f.file_field :files, multiple: true, direct_upload: true
-    p Links:
-    .add-new-link= link_to_add_association 'Add new link for answer', f, :links, partial: 'shared/link_fields'
-    = render 'shared/links_form', f: f
-
-    = f.submit 'Save'
+  .row.answer-comments
+    = render 'comments/comments', commentable: answer, comment_path: comment_answer_path(answer)
