@@ -206,42 +206,4 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
-
-  describe 'POST #comment' do
-    let!(:answer) { create(:answer) }
-
-    context 'authorized user' do
-      before { login(create(:user)) }
-
-      context 'with valid attributes' do
-        let!(:comment_attrs) { attributes_for(:comment) }
-
-        context 'by the other user' do
-          it 'should be able to add a comment to the question' do
-            expect { post :comment, params: { id: answer, comment: { body: comment_attrs[:body] } }, format: :js }
-                .to change{ answer.comments.count }.by(1)
-          end
-
-          it 'renders comment template' do
-            post :comment, params: {  id: answer, comment: { body: comment_attrs[:body] } }, format: :js
-            expect(response).to render_template :comment
-          end
-        end
-      end
-
-      context 'with invalid attributes' do
-        it 'cannot add a comment' do
-          expect { post :comment, params: { id: answer, comment: { body: '' } }, format: :js }
-              .to_not change{ answer.comments.count }
-        end
-      end
-    end
-
-    context 'unauthorized user' do
-      it 'cannot add a comment' do
-        expect { post :comment, params: { id: answer, comment: { body: 'comment body' } }, format: :js }
-            .to_not change{ answer.comments.count }
-      end
-    end
-  end
 end

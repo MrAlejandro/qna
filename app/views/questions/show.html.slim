@@ -5,7 +5,8 @@ div.container id="question_#{@question.id}"
     = render @question
 
   .row.question-comments
-    = render 'comments/comments', commentable: @question, comment_path: comment_question_path(@question)
+    = render 'comments/comments', commentable: @question,
+            comment_path: question_comments_path(@question, stream_resource: 'question', stream_resource_id: @question.id)
 
   - if @question.reward
     .reward You will get the '#{@question.reward.name}' reward for the best answer.

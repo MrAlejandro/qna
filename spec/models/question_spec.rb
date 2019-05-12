@@ -34,12 +34,4 @@ RSpec.describe Question, type: :model do
     question.upvote(user)
     expect { question.upvote(user) }.to change { question.upvotes.count }.by(-1)
   end
-
-  it 'should be able to comment a question' do
-    question = create(:question)
-    comments_attrs = attributes_for(:comment)
-    user = create(:user)
-
-    expect { question.comment(user, { body: comments_attrs[:body] }) }.to change { question.comments.count }.by(1)
-  end
 end

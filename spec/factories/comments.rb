@@ -4,4 +4,8 @@ FactoryBot.define do
   factory :comment do
     body { generate(:comment_body) }
   end
+
+  trait :invalid do
+    body { nil }
+  end
 end

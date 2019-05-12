@@ -1,0 +1,10 @@
+var resourceKlass = '<%= @commentable.class.name.downcase %>',
+    $container = $('#' + resourceKlass + '_' + '<%= @commentable.id %>');
+
+$container.find('.comments-errors').html('<%= render 'shared/errors', resource: @comment %>');
+
+<% unless @comment.errors.present? %>
+$container
+  .find('.' + resourceKlass + '-comments .comments')
+  .append('<%= j render @comment %>');
+<% end %>

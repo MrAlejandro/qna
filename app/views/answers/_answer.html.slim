@@ -41,4 +41,5 @@ div.container.answer class=('best-answer' if answer.best?) id="answer_#{answer.i
           = button_to "Delete '#{link.name}'", link_path(link, redirect_url: question_url(answer.question)), method: :delete, id: "delete_answer_link_#{link.id}"
 
   .row.answer-comments
-    = render 'comments/comments', commentable: answer, comment_path: comment_answer_path(answer)
+    = render 'comments/comments', commentable: answer,
+            comment_path: answer_comments_path(answer, stream_resource: 'question', stream_resource_id: answer.question.id)

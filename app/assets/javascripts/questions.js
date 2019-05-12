@@ -13,29 +13,13 @@ $(document).on('turbolinks:load', function () {
     received: function (data) {
       var question = JSON.parse(data);
 
-      $('.questions-list').append(
-        JST['templates/question'](question)
-      );
-    },
-  });
-
-  App.cable.subscriptions.create('CommentsChannel', {
-    connected: function () {
-      this.perform('follow', {resource: 'question', id: gon.question_id});
-    },
-
-    received: function (data) {
-      var comment = JSON.parse(data);
-
-      if (comment.commentable_type !== 'Question') {
+      if (question.author_id === gon.user_id) {
         return;
       }
 
-      var $container = $('#question_' + comment.commentable_id)
-        .find('.question-comments')
-        .find('.comments');
-
-      $container.append(JST['templates/comment'](comment));
+      $('.questions-list').append(
+        JST['templates/question'](question)
+      );
     },
   });
 });
