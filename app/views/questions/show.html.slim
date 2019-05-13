@@ -1,27 +1,32 @@
-.question-errors
+div.container id="question_#{@question.id}"
+  .question-errors
 
-.question
-  = render @question
+  .question
+    = render @question
 
-- if @question.reward
-  .reward You will get the '#{@question.reward.name}' reward for the best answer.
+  .row.question-comments
+    = render 'comments/comments', commentable: @question,
+            comment_path: question_comments_path(@question, stream_resource: 'question', stream_resource_id: @question.id)
 
-.answers
-  = render @answers
+  - if @question.reward
+    .reward You will get the '#{@question.reward.name}' reward for the best answer.
 
-.answer-errors
-  = render 'shared/errors', resource: @answer
+  .answers
+    = render @answers
 
-= form_with model: [@question, @answer] do |f|
-  p
-    = f.label :body, 'Answer'
-    = f.text_area :body
-  p
-    = f.label :files
-    = f.file_field :files, multiple: true, direct_upload: true
+  .answer-errors
+    = render 'shared/errors', resource: @answer
 
-  p Links:
-  .add-new-link= link_to_add_association 'Add new link for answer', f, :links, partial: 'shared/link_fields'
-  = render 'shared/links_form', f: f
+  = form_with model: [@question, @answer] do |f|
+    p
+      = f.label :body, 'Answer'
+      = f.text_area :body
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true, direct_upload: true
 
-  = f.submit 'Create answer'
+    p Links:
+    .add-new-link= link_to_add_association 'Add new link for answer', f, :links, partial: 'shared/link_fields'
+    = render 'shared/links_form', f: f
+
+    = f.submit 'Create answer'

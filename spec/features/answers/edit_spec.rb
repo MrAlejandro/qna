@@ -30,7 +30,6 @@ feature 'User can edit his answer', %q{
         click_on 'Save'
 
         expect(page).to_not have_content answer.body
-        expect(page).to_not have_selector 'textarea'
         expect(page).to have_content new_body
       end
     end

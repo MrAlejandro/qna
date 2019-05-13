@@ -4,6 +4,7 @@ class Question < ApplicationRecord
   has_one :reward, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :links, dependent: :destroy, as: :linkable
+  has_many :comments, dependent: :destroy, as: :commentable
   belongs_to :author, class_name: 'User'
 
   accepts_nested_attributes_for :links, reject_if: :all_blank

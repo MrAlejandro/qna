@@ -1,0 +1,28 @@
+div.container.answer id="answer_#{@id}"
+  p= @body
+
+  .votes
+    - if @question.author_id != gon.user_id
+      .vote-links-container
+        p== @upvote_link
+        p== @downvote_link
+
+    .vote-rating id="vote_for_#{@resource_klass}_#{@id}"
+      div.voting-rating
+        | Rating:
+        span.rating= @rating
+
+  - if @files.length
+    div.row.files
+      - for file in @files
+        div id="answer_file_#{file.id}"
+          p
+            a href="#{file.file_path}" #{file.file_name}
+
+  div.row.links
+    - if @links.length
+      p Links:
+      ul
+        - for link in @links
+          li
+            a rel="nofollow" href="#{link.url}" #{link.name}

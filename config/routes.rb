@@ -14,8 +14,13 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: :votable do
+    resources :comments, only: :create
+
     resources :answers, concerns: :votable, shallow: true, only: %i[create update destroy] do
+      resources :comments, only: :create
       patch :best, on: :member
     end
   end
+
+  mount ActionCable.server => '/cable'
 end

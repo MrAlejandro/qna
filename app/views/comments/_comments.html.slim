@@ -1,0 +1,11 @@
+.comments.container
+  .comments-errors
+  = render commentable.comments
+
+- if current_user
+  = form_for :comment, method: :post, url: comment_path, remote: true, format: :js do |f|
+    p
+      = f.label :body, 'Comment'
+      = f.text_area :body
+
+    = f.submit 'Add comment'

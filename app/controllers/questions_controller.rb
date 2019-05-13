@@ -4,6 +4,8 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_question, only: %i[show edit update destroy]
 
+  after_action :publish_question, only: %i[create]
+
   def index
     @questions = Question.all
   end
@@ -27,6 +29,8 @@ class QuestionsController < ApplicationController
     @answer = Answer.new
     @answer.links.new
     @answers = @question.answers.best_first
+    gon.question_id = @question.id
+    gon.answer_ids = @answers.pluck(:id)
   end
 
   def edit
@@ -46,6 +50,15 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def publish_question
+    return if @question.errors.any?
+
+    ActionCable.server.broadcast(
+        'questions',
+        ApplicationController.render(partial: 'questions/question.json', locals: { question: @question })
+    )
+  end
 
   def set_question
     @question = Question.with_attached_files.find(params[:id])
