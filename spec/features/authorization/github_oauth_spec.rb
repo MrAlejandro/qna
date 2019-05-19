@@ -5,6 +5,7 @@ feature 'User can sign in using github', %q{
 } do
   background { visit new_user_session_path }
   it 'can sign in user with Google account' do
+    mock_github_auth
     click_on 'Sign in with GitHub'
 
     expect(page).to have_content 'dude@example.com'
